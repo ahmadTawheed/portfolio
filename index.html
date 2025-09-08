@@ -3,348 +3,641 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أحمد توحيد</title>
-    <!-- Tailwind CSS CDN for styling -->
+    <title>أحمد توحيد | مطور ويب محترف</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="https://avatars.githubusercontent.com/u/186093996?s=400&u=693dcfe42ff8d02153d02f62c29ef060de301765&v=4">
-    <!-- Google Fonts for a clean, professional feel -->
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Toastify for notifications -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <!-- Tilt.js for 3D card hover effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+    
+    <!-- Custom Styles -->
     <style>
-        /* Custom styles for a cleaner, modern look */
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #121212; /* A professional dark gray */
-            color: #e0e0e0; /* Light gray text */
-        }
-        .text-accent {
-            color: #4CAF50; /* Green accent color */
-        }
-        .bg-gradient-clean {
-            background-image: linear-gradient(to right, #1a1a1a, #121212);
-        }
-        .card {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(76, 175, 80, 0.2);
-        }
-        .animated-counter {
-            font-family: monospace;
-        }
-        .scroll-fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .scroll-fade-in.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        .view-count-text {
-            color: #8c8c8c;
-            font-size: 0.875rem;
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #8BC34A;
+            --accent-color: #00BCD4;
+            --dark-bg: #0f0f0f;
+            --darker-bg: #090909;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-1: linear-gradient(135deg, #4CAF50, #8BC34A);
+            --gradient-2: linear-gradient(135deg, #00BCD4, #4CAF50);
+            --gradient-3: linear-gradient(135deg, #8BC34A, #CDDC39);
         }
         
-        /* New styles for the animated skill bars */
-        .skill-bar-container {
-            background-color: #333;
-            height: 12px;
-            border-radius: 6px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+        
+        /* Navigation styles */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero section with 3D background */
+        #hero {
+            position: relative;
             overflow: hidden;
         }
-        .skill-bar {
+        
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background-color: #4CAF50;
-            transition: width 1s ease-in-out;
-            width: 0; /* Initial state for animation */
+            z-index: -1;
         }
         
-        /* Keyframes for the skill bar animation */
-        @keyframes fill-bar {
-            from { width: 0; }
-            to { width: var(--skill-percentage); }
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
-        .skill-bar.is-visible {
-            animation: fill-bar 1s ease-in-out forwards;
+        
+        /* 3D Card effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
         }
-
-        /* Testimonials section specific styles */
-        .testimonial-card {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            transition: opacity 0.5s ease-in-out;
+        
+        .card-3d:hover {
+            transform: rotateY(5deg) rotateX(-5deg);
         }
-        .testimonial-card.hidden {
-            opacity: 0;
-            display: none;
+        
+        /* Gradient text */
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
         }
-        .testimonial-container {
+        
+        /* Animated skill bars */
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* Custom button */
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
             position: relative;
-            min-height: 300px; /* Adjust height as needed */
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+        
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+        }
+        
+        /* Portfolio item */
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        .testimonial-content {
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.4s ease;
         }
-        .testimonial-content.active {
+        
+        .portfolio-item:hover .portfolio-overlay {
             opacity: 1;
+        }
+        
+        /* Testimonial card */
+        .testimonial-card {
+            position: relative;
+            padding: 25px;
+            border-radius: 15px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 80px;
+            color: rgba(76, 175, 80, 0.2);
+            font-family: serif;
+        }
+        
+        /* Contact form */
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        /* Social icons */
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: var(--gradient-1);
+            transform: translateY(-5px);
+        }
+        
+        /* Stats counter */
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.2);
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Custom animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Loading animation */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
-<body class="bg-[#121212] text-[#e0e0e0] antialiased">
-
-    <!-- Navigation Bar -->
-    <header class="sticky top-0 z-50 bg-[#1a1a1a] bg-opacity-90 backdrop-blur-md shadow-lg">
-        <nav class="container mx-auto p-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-accent">أحمد توحيد</a>
-            <ul class="hidden md:flex space-x-4 space-x-reverse items-center">
-                <li><a href="#about" class="hover:text-accent transition duration-300">من أنا</a></li>
-                <li><a href="#services" class="hover:text-accent transition duration-300">الخدمات</a></li>
-                <li><a href="#features" class="hover:text-accent transition duration-300">المميزات</a></li>
-                <li><a href="#skills-repo" class="hover:text-accent transition duration-300">مستودع المهارات</a></li>
-                <li><a href="#portfolio" class="hover:text-accent transition duration-300">أعمالي</a></li>
-                <li><a href="#testimonials" class="hover:text-accent transition duration-300">آراء العملاء</a></li>
-                <li><a href="#stats" class="hover:text-accent transition duration-300">إنجازاتي</a></li>
-                <li><a href="#contact" class="hover:text-accent transition duration-300">تواصل</a></li>
-                <!-- Download CV button for desktop -->
-                <li>
-                    <a href="#" download="سيرة-ذاتية-أحمد-توحيد" class="px-4 py-2 rounded-full bg-accent text-white hover:bg-white hover:text-[#121212] transition duration-300 font-bold">
-                        تنزيل السيرة الذاتية
-                    </a>
-                </li>
-            </ul>
-            <div class="md:hidden">
-                <button id="menu-btn" class="text-white focus:outline-none">
-                    <i class="fa-solid fa-bars text-2xl"></i>
+<body>
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 glass py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold gradient-text">أحمد توحيد</a>
+            
+            <nav class="hidden md:flex space-x-6 space-x-reverse">
+                <a href="#home" class="nav-link">الرئيسية</a>
+                <a href="#about" class="nav-link">من أنا</a>
+                <a href="#services" class="nav-link">الخدمات</a>
+                <a href="#skills" class="nav-link">المهارات</a>
+                <a href="#portfolio" class="nav-link">أعمالي</a>
+                <a href="#testimonials" class="nav-link">آراء العملاء</a>
+                <a href="#contact" class="nav-link">تواصل معي</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <a href="#" class="hidden md:block btn-primary">تحميل السيرة الذاتية</a>
+                <button id="menu-toggle" class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
-        </nav>
+        </div>
+        
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-[#1a1a1a] py-4">
-            <ul class="flex flex-col items-center space-y-4">
-                <li><a href="#about" class="block py-2 hover:text-accent transition duration-300">من أنا</a></li>
-                <li><a href="#services" class="block py-2 hover:text-accent transition duration-300">الخدمات</a></li>
-                <li><a href="#features" class="block py-2 hover:text-accent transition duration-300">المميزات</a></li>
-                <li><a href="#skills-repo" class="block py-2 hover:text-accent transition duration-300">مستودع المهارات</a></li>
-                <li><a href="#portfolio" class="block py-2 hover:text-accent transition duration-300">أعمالي</a></li>
-                <li><a href="#testimonials" class="block py-2 hover:text-accent transition duration-300">آراء العملاء</a></li>
-                <li><a href="#stats" class="block py-2 hover:text-accent transition duration-300">إنجازاتي</a></li>
-                <li><a href="#contact" class="block py-2 hover:text-accent transition duration-300">تواصل</a></li>
-                <!-- Download CV button for mobile -->
-                <li>
-                    <a href="#" download="سيرة-ذاتية-أحمد-توحيد" class="block px-4 py-2 rounded-full bg-accent text-white hover:bg-white hover:text-[#121212] transition duration-300 font-bold">
-                        تنزيل السيرة الذاتية
-                    </a>
-                </li>
-            </ul>
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 bg-opacity-95 z-50 p-6">
+            <button id="close-menu" class="absolute top-4 left-4 text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="mt-12">
+                <a href="#" class="block py-3 text-lg font-medium">الرئيسية</a>
+                <a href="#about" class="block py-3 text-lg font-medium">من أنا</a>
+                <a href="#services" class="block py-3 text-lg font-medium">الخدمات</a>
+                <a href="#skills" class="block py-3 text-lg font-medium">المهارات</a>
+                <a href="#portfolio" class="block py-3 text-lg font-medium">أعمالي</a>
+                <a href="#testimonials" class="block py-3 text-lg font-medium">آراء العملاء</a>
+                <a href="#contact" class="block py-3 text-lg font-medium">تواصل معي</a>
+                <a href="#" class="block mt-6 btn-primary text-center">تحميل السيرة الذاتية</a>
+            </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section id="hero" class="relative overflow-hidden min-h-screen flex items-center justify-center text-center p-8 bg-cover bg-center" style="background-image: url('https://blogger.googleusercontent.com/img/a/AVvXsEiwrVyaAaugQXB5bTAxNKjOlcDKC_bS5ZM756_xzTxnylbl0rascQi8cebht3YPSMxddk6qZPKQjgca9qjCdzlHe3wXsEjdfLtMBhFxPz0NYNCVySOMtiXwwJjhjAOj82wsr3ZKQyzrKMweU0hkSgaD6r9PYfWcFaujTZ2p83waWhK1lFBSbJI7K3Fx3MY');">
-        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-        <div class="relative z-10 space-y-6 scroll-fade-in">
-            <!-- The h1 tag is now more responsive with different text sizes for various screen sizes -->
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white">
-                أحمد توحيد، <span class="text-accent">مطور ويب</span> متكامل
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <canvas id="hero-canvas"></canvas>
+        
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="hero-title text-4xl md:text-6xl font-bold mb-4" data-aos="fade-up">
+                أحمد <span class="gradient-text">توحيد</span>
             </h1>
-            <p class="text-lg md:text-2xl max-w-2xl mx-auto text-gray-300">
-                أصمم وأبني مواقع وتطبيقات ويب مبتكرة تدمج بين الجمال البصري والأداء القوي.
+            <h2 class="text-2xl md:text-4xl font-bold mb-6" data-aos="fade-up" data-aos-delay="100">
+                مطور <span class="gradient-text">ويب محترف</span>
+            </h2>
+            <p class="max-w-2xl mx-auto text-lg md:text-xl mb-10 text-gray-300" data-aos="fade-up" data-aos-delay="200">
+                أصمم وأبني مواقع وتطبيقات ويب مبتكرة تدمج بين الجمال البصري والأداء القوي
             </p>
-            <a href="#contact" class="inline-block px-8 py-3 rounded-full text-lg font-bold bg-accent text-white hover:bg-white hover:text-[#121212] transition duration-300 shadow-lg">
-                ابدأ مشروعك الآن
+            <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-delay="300">
+                <a href="#contact" class="btn-primary">ابدأ مشروعك الآن</a>
+                <a href="#portfolio" class="px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white hover:text-gray-900 transition duration-300">
+                    شاهد أعمالي
+                </a>
+            </div>
+            
+            <div class="mt-16 flex justify-center space-x-6 space-x-reverse" data-aos="fade-up" data-aos-delay="400">
+                <a href="#" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-white">
+                <i class="fas fa-chevron-down text-2xl"></i>
             </a>
         </div>
     </section>
 
-    <!-- About Me Section -->
-    <section id="about" class="py-20 bg-gradient-clean">
-        <div class="container mx-auto p-8 lg:p-16 text-center scroll-fade-in">
-            <div class="flex items-center justify-center mb-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-accent">من أنا</h2>
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">من أنا</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
             </div>
-            <p id="about-text" class="text-md md:text-lg max-w-4xl mx-auto leading-relaxed">
-                اسمي أحمد توحيد، وأمتلك شغفًا عميقًا بتحويل الأفكار إلى تجارب رقمية مميزة. أقدم حلولاً متكاملة لتطوير الويب، من تصميم واجهات المستخدم (UI/UX) التي تضمن سهولة الاستخدام، إلى بناء واجهات أمامية تفاعلية وواجهات خلفية قوية وآمنة. أعمل بتركيز على التفاصيل لضمان جودة عالية في كل مشروع.
-            </p>
+            
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/3" data-aos="fade-right">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-cyan-500 rounded-full transform rotate-6 opacity-70"></div>
+                        <img src="https://avatars.githubusercontent.com/u/186093996?s=400&u=693dcfe42ff8d02153d02f62c29ef060de301765&v=4" alt="أحمد توحيد" class="relative rounded-full w-64 h-64 mx-auto border-4 border-white">
+                    </div>
+                </div>
+                
+                <div class="md:w-2/3" data-aos="fade-left">
+                    <h3 class="text-2xl font-bold mb-4">مطور ويب متكامل ومصمم واجهات</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        اسمي أحمد توحيد، وأمتلك شغفًا عميقًا بتحويل الأفكار إلى تجارب رقمية مميزة. أقدم حلولاً متكاملة لتطوير الويب، من تصميم واجهات المستخدم (UI/UX) التي تضمن سهولة الاستخدام، إلى بناء واجهات أمامية تفاعلية وواجهات خلفية قوية وآمنة.
+                    </p>
+                    <p class="text-gray-300 mb-8 leading-relaxed">
+                        أعمل بتركيز على التفاصيل لضمان جودة عالية في كل مشروع، مع الالتزام بأحدث معايير التطوير وأفضل الممارسات في الصناعة.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div>
+                            <p class="text-gray-400">الاسم:</p>
+                            <p class="font-medium">أحمد توحيد</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">الموقع:</p>
+                            <p class="font-medium">القاهرة، مصر</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">البريد الإلكتروني:</p>
+                            <p class="font-medium">ahmadtawheed@gmail.com</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">الهاتف:</p>
+                            <p class="font-medium">+20 150-1021-670</p>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="btn-primary">تحميل السيرة الذاتية</a>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-20 bg-[#121212]">
-        <div class="container mx-auto p-8 lg:p-16 text-center scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-accent">خدماتي</h2>
+    <section id="services" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">خدماتي</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-300" data-aos="fade-up" data-aos-delay="200">
+                    أقدم حلولاً متكاملة لتطوير الويب بجودة عالية وأسعار تنافسية
+                </p>
+            </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service Card 1 -->
-                <div class="card p-8 rounded-xl">
-                    <i class="fa-solid fa-drafting-compass text-5xl text-accent mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">تصميم UI/UX</h3>
-                    <p class="text-gray-400">
+                <!-- Service 1 -->
+                <div class="glass p-8 rounded-xl card-3d" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-cyan-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-paint-brush text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">تصميم UI/UX</h3>
+                    <p class="text-gray-300 mb-6">
                         تصميم واجهات مستخدم حديثة وجذابة مع التركيز على تجربة مستخدم سلسة وممتعة.
                     </p>
+                    <a href="#" class="text-green-400 font-medium flex items-center">
+                        أعرف أكثر <i class="fas fa-arrow-left mr-2"></i>
+                    </a>
                 </div>
-                <!-- Service Card 2 -->
-                <div class="card p-8 rounded-xl">
-                    <i class="fa-solid fa-laptop-code text-5xl text-accent mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">تطوير الواجهة الأمامية</h3>
-                    <p class="text-gray-400">
+                
+                <!-- Service 2 -->
+                <div class="glass p-8 rounded-xl card-3d" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-cyan-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-laptop-code text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">تطوير الواجهة الأمامية</h3>
+                    <p class="text-gray-300 mb-6">
                         بناء واجهات أمامية متجاوبة وفعالة باستخدام أحدث الأطر مثل React.js.
                     </p>
+                    <a href="#" class="text-green-400 font-medium flex items-center">
+                        أعرف أكثر <i class="fas fa-arrow-left mr-2"></i>
+                    </a>
                 </div>
-                <!-- Service Card 3 -->
-                <div class="card p-8 rounded-xl">
-                    <i class="fa-solid fa-database text-5xl text-accent mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">تطوير الواجهة الخلفية</h3>
-                    <p class="text-gray-400">
+                
+                <!-- Service 3 -->
+                <div class="glass p-8 rounded-xl card-3d" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-cyan-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-server text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">تطوير الواجهة الخلفية</h3>
+                    <p class="text-gray-300 mb-6">
                         تطوير واجهات خلفية قوية وآمنة لإدارة البيانات والعمليات المعقدة.
                     </p>
+                    <a href="#" class="text-green-400 font-medium flex items-center">
+                        أعرف أكثر <i class="fas fa-arrow-left mr-2"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-gradient-clean">
-        <div class="container mx-auto p-8 lg:p-16 text-center scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-accent">لماذا تختارني؟</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature Card 1 -->
-                <div class="card p-8 rounded-xl">
-                    <i class="fa-solid fa-palette text-5xl text-accent mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">تصميم فريد ومخصص</h3>
-                    <p class="text-gray-400">
-                        أقدم حلولاً تصميمية مبتكرة تناسب هوية علامتك التجارية وتميزك عن المنافسين.
-                    </p>
-                </div>
-                <!-- Feature Card 2 -->
-                <div class="card p-8 rounded-xl">
-                    <i class="fa-solid fa-rocket text-5xl text-accent mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">أداء وسرعة فائقة</h3>
-                    <p class="text-gray-400">
-                        أبني مواقع سريعة ومتجاوبة على جميع الأجهزة، مما يعزز تجربة المستخدم ويحسن ترتيبك في محركات البحث.
-                    </p>
-                </div>
-                <!-- Feature Card 3 -->
-                <div class="card p-8 rounded-xl">
-                    <i class="fa-solid fa-headset text-5xl text-accent mb-4"></i>
-                    <h3 class="text-2xl font-bold mb-2">دعم فني مستمر</h3>
-                    <p class="text-gray-400">
-                        لا ينتهي عملي بتسليم المشروع. أقدم دعمًا فنيًا لضمان استمرارية عمل موقعك بكفاءة عالية.
-                    </p>
-                </div>
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">مهاراتي التقنية</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-300" data-aos="fade-up" data-aos-delay="200">
+                    خبراتي التقنية في مختلف مجالات تطوير الويب
+                </p>
             </div>
-        </div>
-    </section>
-
-    <!-- Skills Repository Section -->
-    <section id="skills-repo" class="py-20 bg-[#121212]">
-        <div class="container mx-auto p-8 lg:p-16 scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-accent">مستودع المهارات</h2>
-            <p class="text-lg md:text-xl max-w-4xl mx-auto text-center text-gray-400 mb-12">
-                خبراتي التقنية في مختلف مجالات تطوير الويب.
-            </p>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- Frontend Skills -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-6 text-white text-right">الواجهة الأمامية</h3>
+                <div data-aos="fade-right">
+                    <h3 class="text-xl font-bold mb-6">تطوير الواجهات الأمامية</h3>
+                    
                     <div class="space-y-6">
-                        <!-- Skill Item 1: HTML/CSS -->
-                        <div class="skill-item" data-percentage="95">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">HTML5 & CSS3</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">95%</span>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>HTML/CSS</span>
+                                <span>95%</span>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 95%;"></div>
-                            </div>
-                        </div>
-                        <!-- Skill Item 2: JavaScript -->
-                        <div class="skill-item" data-percentage="90">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">JavaScript</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">90%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 90%;"></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95%"></div>
                             </div>
                         </div>
-                        <!-- Skill Item 3: React.js -->
-                        <div class="skill-item" data-percentage="85">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">React.js</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">85%</span>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>JavaScript</span>
+                                <span>90%</span>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 85%;"></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
                             </div>
                         </div>
-                        <!-- Skill Item 4: Tailwind CSS -->
-                        <div class="skill-item" data-percentage="95">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">Tailwind CSS</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">95%</span>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>React.js</span>
+                                <span>85%</span>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 95%;"></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Tailwind CSS</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Backend & Tools Skills -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-6 text-white text-right">الواجهة الخلفية والأدوات</h3>
+                
+                <!-- Backend Skills -->
+                <div data-aos="fade-left">
+                    <h3 class="text-xl font-bold mb-6">تطوير الواجهات الخلفية</h3>
+                    
                     <div class="space-y-6">
-                        <!-- Skill Item 5: Node.js/Express -->
-                        <div class="skill-item" data-percentage="80">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">Node.js & Express</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">80%</span>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Node.js/Express</span>
+                                <span>80%</span>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 80%;"></div>
-                            </div>
-                        </div>
-                        <!-- Skill Item 6: MongoDB -->
-                        <div class="skill-item" data-percentage="75">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">MongoDB</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">75%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 75%;"></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80%"></div>
                             </div>
                         </div>
-                        <!-- Skill Item 7: Git -->
-                        <div class="skill-item" data-percentage="90">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">Git & GitHub</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">90%</span>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>MongoDB</span>
+                                <span>75%</span>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 90%;"></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="75%"></div>
                             </div>
                         </div>
-                        <!-- Skill Item 8: Figma & Adobe XD -->
-                        <div class="skill-item" data-percentage="80">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-semibold">Figma & Adobe XD</span>
-                                <span class="text-sm text-gray-400 skill-percentage-value">80%</span>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Git & GitHub</span>
+                                <span>90%</span>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar rounded-full" style="--skill-percentage: 80%;"></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Figma & Adobe XD</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80%"></div>
                             </div>
                         </div>
                     </div>
@@ -353,505 +646,519 @@
         </div>
     </section>
 
-    <!-- Portfolio Section (Updated) -->
-    <section id="portfolio" class="py-20 bg-gradient-clean">
-        <div class="container mx-auto p-8 lg:p-16 text-center scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-accent">أعمالي</h2>
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">أعمالي</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-300" data-aos="fade-up" data-aos-delay="200">
+                    بعض المشاريع التي قمت بتنفيذها
+                </p>
+            </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Portfolio Item 1: Restaurant Website -->
-                <div class="card overflow-hidden rounded-xl portfolio-item" data-project-id="project-restaurant">
+                <!-- Portfolio Item 1 -->
+                <div class="portfolio-item rounded-xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
                     <img src="https://blogger.googleusercontent.com/img/a/AVvXsEj6dMDSSkAOdSsNqV2nF82fKU0CwaxjFgyGscxtw51GD9CtJCQ72DBlaehD4-Rau002Aui_xxdNxydUfrUw9roO7YlKZEv5HoMYwNKvOKbbQccoh9op_nqxqtI4Q0Par4eqI6Sb3z86izVw7hbk2r79LEDTnafVetJm5tsYB7Xsy60j97bWqmNVuzEIrwQ" alt="موقع مطعم" class="w-full h-48 object-cover">
-                    <div class="p-6">
+                    <div class="p-6 bg-gray-900">
                         <h3 class="text-xl font-bold mb-2">موقع مطعم "بيتزا البيرتو"</h3>
-                        <p class="text-sm text-gray-400 mb-4 project-description">
-                            تصميم وتطوير موقع إلكتروني تفاعلي لعرض قائمة الطعام وإدارة الحجوزات عبر الإنترنت.
+                        <p class="text-gray-400 mb-4">
+                            تصميم وتطوير موقع إلكتروني تفاعلي لعرض قائمة الطعام وإدارة الحجوزات.
                         </p>
-                        <!-- Tools and technologies used for this project -->
-                        <div class="mb-4 text-sm text-gray-400 flex items-center justify-end space-x-2 space-x-reverse">
-                            <span class="font-bold ml-2">الأدوات:</span>
-                            <i class="fa-brands fa-html5 text-orange-600" title="HTML5"></i>
-                            <i class="fa-brands fa-css3-alt text-blue-600" title="CSS3"></i>
-                            <i class="fa-brands fa-js text-yellow-400" title="JavaScript"></i>
-                            <i class="fa-brands fa-bootstrap text-purple-600" title="Bootstrap"></i>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">HTML</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">CSS</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">JavaScript</span>
                         </div>
-                        <div class="text-right text-gray-500 text-sm mb-4">
-                            <span>تاريخ البدء: <span class="font-bold">2023-01-15</span></span><br>
-                            <span>تاريخ الانتهاء: <span class="font-bold">2023-04-30</span></span>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <button class="view-project-btn w-full p-3 rounded-lg text-white bg-accent hover:bg-[#333] transition duration-300 font-bold">
-                                مشاهدة المشروع
-                            </button>
-                            <!-- GitHub Button for the project -->
-                            <a href="#" class="w-full p-3 rounded-lg text-white bg-gray-700 hover:bg-gray-800 transition duration-300 font-bold flex items-center justify-center">
-                                <i class="fa-brands fa-github text-xl ml-2"></i>
-                                <span>GitHub</span>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-green-400 hover:text-green-300">
+                                <i class="fas fa-external-link-alt ml-1"></i> عرض المشروع
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <i class="fab fa-github"></i>
                             </a>
                         </div>
-                        <!-- View count display -->
-                        <div class="mt-4 text-center view-count-text">
-                            <span class="view-count-value">205</span> مشاهدة
-                        </div>
+                    </div>
+                    <div class="portfolio-overlay">
+                        <a href="#" class="btn-primary">عرض التفاصيل</a>
                     </div>
                 </div>
-                <!-- Portfolio Item 2: E-commerce Website -->
-                <div class="card overflow-hidden rounded-xl portfolio-item" data-project-id="project-ecommerce">
+                
+                <!-- Portfolio Item 2 -->
+                <div class="portfolio-item rounded-xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
                     <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjXVoxm7BXxfaBiNIL9sKrNRhrYRn2aou4lGkvdjWsWj8sGWrax26pbGzGJ68WSRVI626Y8S8ou6qIspmt7S2jgrfu-7aVF9nbPixfgdo5xiKNJWTQ0CclyhGjO9-RU7sIHUD09T2oiHpJqO5sWVM-704-aJM95AAFMRsE9CJ8RSqKhMYUI78pi4muM5xg" alt="موقع تسوق" class="w-full h-48 object-cover">
-                    <div class="p-6">
+                    <div class="p-6 bg-gray-900">
                         <h3 class="text-xl font-bold mb-2">موقع تسوق "متجر الإلكترونيات"</h3>
-                        <p class="text-sm text-gray-400 mb-4 project-description">
-                            بناء منصة تسوق إلكتروني كاملة مع نظام سلة مشتريات آمن ولوحة تحكم لإدارة المنتجات.
+                        <p class="text-gray-400 mb-4">
+                            بناء منصة تسوق إلكتروني كاملة مع نظام سلة مشتريات آمن.
                         </p>
-                        <!-- Tools and technologies used for this project -->
-                        <div class="mb-4 text-sm text-gray-400 flex items-center justify-end space-x-2 space-x-reverse">
-                            <span class="font-bold ml-2">الأدوات:</span>
-                            <i class="fa-brands fa-react text-blue-500" title="React.js"></i>
-                            <i class="fa-brands fa-node-js text-green-500" title="Node.js"></i>
-                            <i class="fa-solid fa-database text-orange-500" title="MongoDB"></i>
-                            <i class="fa-brands fa-stripe text-purple-600" title="Stripe"></i>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">React</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">Node.js</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">MongoDB</span>
                         </div>
-                        <div class="text-right text-gray-500 text-sm mb-4">
-                            <span>تاريخ البدء: <span class="font-bold">2023-06-01</span></span><br>
-                            <span>تاريخ الانتهاء: <span class="font-bold">2023-09-15</span></span>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <button class="view-project-btn w-full p-3 rounded-lg text-white bg-accent hover:bg-[#333] transition duration-300 font-bold">
-                                مشاهدة المشروع
-                            </button>
-                            <!-- GitHub Button for the project -->
-                            <a href="#" class="w-full p-3 rounded-lg text-white bg-gray-700 hover:bg-gray-800 transition duration-300 font-bold flex items-center justify-center">
-                                <i class="fa-brands fa-github text-xl ml-2"></i>
-                                <span>GitHub</span>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-green-400 hover:text-green-300">
+                                <i class="fas fa-external-link-alt ml-1"></i> عرض المشروع
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <i class="fab fa-github"></i>
                             </a>
                         </div>
-                        <!-- View count display -->
-                        <div class="mt-4 text-center view-count-text">
-                            <span class="view-count-value">95</span> مشاهدة
-                        </div>
+                    </div>
+                    <div class="portfolio-overlay">
+                        <a href="#" class="btn-primary">عرض التفاصيل</a>
                     </div>
                 </div>
-                <!-- Portfolio Item 3: Chemistry Teacher Website -->
-                <div class="card overflow-hidden rounded-xl portfolio-item" data-project-id="project-teacher">
+                
+                <!-- Portfolio Item 3 -->
+                <div class="portfolio-item rounded-xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="300">
                     <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgxu6R2Ikc35KGl-8PZwgRpCEgenTH0QayX8pXC56gtidmCfS3IL2FFcyZ3z71tJ5hjrdszotBW8t3gQdhIjmLyXZjqgPMOLJnvvBjSkHGzDezCc6vRbxZM7eAEPTNJDjB7tdHMUJAfau3jyz5M9sxnpTapyQk1S--Q7FlstpMyXPyzkAUpNRiItic3Ro8" alt="موقع مدرس كيمياء" class="w-full h-48 object-cover">
-                    <div class="p-6">
+                    <div class="p-6 bg-gray-900">
                         <h3 class="text-xl font-bold mb-2">موقع الأستاذة "هند للكيمياء"</h3>
-                        <p class="text-sm text-gray-400 mb-4 project-description">
-                            بناء منصة تعليمية للمدرسين لعرض الدروس والمحتوى التفاعلي والواجبات المنزلية.
+                        <p class="text-gray-400 mb-4">
+                            بناء منصة تعليمية لعرض الدروس والمحتوى التفاعلي والواجبات.
                         </p>
-                        <!-- Tools and technologies used for this project -->
-                        <div class="mb-4 text-sm text-gray-400 flex items-center justify-end space-x-2 space-x-reverse">
-                            <span class="font-bold ml-2">الأدوات:</span>
-                            <i class="fa-brands fa-react text-blue-500" title="React.js"></i>
-                            <i class="fa-brands fa-js text-yellow-400" title="JavaScript"></i>
-                            <i class="fa-brands fa-figma text-purple-600" title="Figma"></i>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">React</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">JavaScript</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">Figma</span>
                         </div>
-                        <div class="text-right text-gray-500 text-sm mb-4">
-                            <span>تاريخ البدء: <span class="font-bold">2024-01-10</span></span><br>
-                            <span>تاريخ الانتهاء: <span class="font-bold">2024-03-25</span></span>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <button class="view-project-btn w-full p-3 rounded-lg text-white bg-accent hover:bg-[#333] transition duration-300 font-bold">
-                                مشاهدة المشروع
-                            </button>
-                            <!-- GitHub Button for the project -->
-                            <a href="#" class="w-full p-3 rounded-lg text-white bg-gray-700 hover:bg-gray-800 transition duration-300 font-bold flex items-center justify-center">
-                                <i class="fa-brands fa-github text-xl ml-2"></i>
-                                <span>GitHub</span>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-green-400 hover:text-green-300">
+                                <i class="fas fa-external-link-alt ml-1"></i> عرض المشروع
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <i class="fab fa-github"></i>
                             </a>
                         </div>
-                        <!-- View count display -->
-                        <div class="mt-4 text-center view-count-text">
-                            <span class="view-count-value">44</span> مشاهدة
-                        </div>
+                    </div>
+                    <div class="portfolio-overlay">
+                        <a href="#" class="btn-primary">عرض التفاصيل</a>
                     </div>
                 </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="btn-primary">عرض جميع المشاريع</a>
             </div>
         </div>
     </section>
 
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 bg-[#121212]">
-        <div class="container mx-auto p-8 lg:p-16 text-center scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-accent">آراء العملاء</h2>
-            <div class="relative w-full max-w-2xl mx-auto testimonial-container">
-                <div id="testimonial-slider" class="w-full">
-                    <!-- Testimonial content will be dynamically injected here -->
+    <section id="testimonials" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">آراء العملاء</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/100x100/4CAF50/FFFFFF?text=MA" alt="محمد علي" class="w-16 h-16 rounded-full ml-4">
+                        <div>
+                            <h4 class="font-bold">محمد علي</h4>
+                            <div class="text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">
+                        "أحمد عمل معايا شغل جامد جداً في الموقع بتاعنا. بجد فاق توقعاتي من حيث التصميم والأداء. الخدمة ممتازة والدعم بتاعه على طول موجود!"
+                    </p>
                 </div>
-                <!-- Navigation Buttons -->
-                <button id="prev-testimonial" class="absolute top-1/2 right-0 transform -translate-y-1/2 p-3 text-2xl text-accent hover:text-white transition-colors duration-300">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-                <button id="next-testimonial" class="absolute top-1/2 left-0 transform -translate-y-1/2 p-3 text-2xl text-accent hover:text-white transition-colors duration-300">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/100x100/1e88e5/FFFFFF?text=FZ" alt="فاطمة الزهراء" class="w-16 h-16 rounded-full ml-4">
+                        <div>
+                            <h4 class="font-bold">فاطمة الزهراء</h4>
+                            <div class="text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">
+                        "تطوير موقع المتجر كان سهل وسريع مع أحمد. ساعدنا نعمل منصة تجارة إلكترونية قوية وسهلة الاستخدام لعملائنا."
+                    </p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/100x100/ff5722/FFFFFF?text=AM" alt="علياء محمود" class="w-16 h-16 rounded-full ml-4">
+                        <div>
+                            <h4 class="font-bold">علياء محمود</h4>
+                            <div class="text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">
+                        "الشغل مع أحمد كان حلو جداً. تصميم الموقع الجديد لمدرسي الكيمياء كان احترافي أوي، وساعدنا نزود عدد الطلاب اللي سجلوا معانا."
+                    </p>
+                </div>
             </div>
         </div>
     </section>
-
 
     <!-- Stats Section -->
-    <section id="stats" class="py-20 bg-gradient-clean">
-        <div class="container mx-auto p-8 lg:p-16 text-center scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-accent">إنجازاتي بالأرقام</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Stat Item 1 -->
-                <div class="card p-8 rounded-xl">
-                    <p class="text-5xl md:text-6xl font-bold text-accent mb-2 animated-counter" data-target="50">0</p>
-                    <p class="text-lg md:text-xl text-gray-300">مشروع مكتمل</p>
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="stat-card text-center" data-aos="zoom-in" data-aos-delay="100">
+                    <h3 class="text-4xl font-bold gradient-text mb-2 counter" data-target="50">0</h3>
+                    <p class="text-gray-300">مشروع مكتمل</p>
                 </div>
-                <!-- Stat Item 2 -->
-                <div class="card p-8 rounded-xl">
-                    <p class="text-5xl md:text-6xl font-bold text-accent mb-2 animated-counter" data-target="30">0</p>
-                    <p class="text-lg md:text-xl text-gray-300">عميل سعيد</p>
+                
+                <div class="stat-card text-center" data-aos="zoom-in" data-aos-delay="200">
+                    <h3 class="text-4xl font-bold gradient-text mb-2 counter" data-target="30">0</h3>
+                    <p class="text-gray-300">عميل سعيد</p>
                 </div>
-                <!-- Stat Item 3 -->
-                <div class="card p-8 rounded-xl">
-                    <p class="text-5xl md:text-6xl font-bold text-accent mb-2 animated-counter" data-target="5">0</p>
-                    <p class="text-lg md:text-xl text-gray-300">سنوات خبرة</p>
+                
+                <div class="stat-card text-center" data-aos="zoom-in" data-aos-delay="300">
+                    <h3 class="text-4xl font-bold gradient-text mb-2 counter" data-target="5">0</h3>
+                    <p class="text-gray-300">سنوات خبرة</p>
                 </div>
-                <!-- Stat Item 4 -->
-                <div class="card p-8 rounded-xl">
-                    <p class="text-5xl md:text-6xl font-bold text-accent mb-2 animated-counter" data-target="15000">0</p>
-                    <p class="text-lg md:text-xl text-gray-300">سطر كود مكتوب</p>
+                
+                <div class="stat-card text-center" data-aos="zoom-in" data-aos-delay="400">
+                    <h3 class="text-4xl font-bold gradient-text mb-2 counter" data-target="15000">0</h3>
+                    <p class="text-gray-300">سطر كود</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Marketing/Call-to-Action Section -->
-    <section id="cta" class="py-20 bg-[#121212] text-center">
-        <div class="container mx-auto p-8 lg:p-16 scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">جاهز لإنشاء شيء عظيم؟</h2>
-            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-300 mb-8">
-                سواء كان موقعًا إلكترونيًا جديدًا بالكامل أو تجديدًا لموقعك الحالي، أنا هنا لأساعدك في تحقيق رؤيتك.
-                دعنا نبدأ في بناء مشروعك القادم معًا.
-            </p>
-            <a href="#contact" class="inline-block px-10 py-4 rounded-full text-lg font-bold bg-accent text-white hover:bg-white hover:text-[#121212] transition duration-300 shadow-xl">
-                تواصل معي الآن
-            </a>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gradient-clean">
-        <div class="container mx-auto p-8 lg:p-16 scroll-fade-in">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-accent">تواصل معي</h2>
-            <div class="flex flex-col md:flex-row items-center md:items-start justify-center gap-12">
-                <!-- Contact Info -->
-                <div class="md:w-1/3 text-center md:text-right space-y-6">
-                    <div class="flex items-center justify-center md:justify-end space-x-4 space-x-reverse">
-                        <i class="fa-solid fa-envelope text-accent text-2xl"></i>
-                        <span class="text-lg">ahmadtawheed@gmail.com</span>
-                    </div>
-                    <div class="flex items-center justify-center md:justify-end space-x-4 space-x-reverse">
-                        <i class="fa-solid fa-phone text-accent text-2xl"></i>
-                        <span class="text-lg">+20 150-1021-670</span>
-                    </div>
-                    <!-- Social Media Links -->
-                    <div class="flex justify-center md:justify-end space-x-6 space-x-reverse pt-4">
-                        <a target="_blank" href="https://www.linkedin.com/in/ahmed-tawheed-165335252?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="text-accent hover:text-white transition duration-300"><i class="fa-brands fa-linkedin text-3xl"></i></a>
-                        <a target="_blank" href="https://github.com/ahmadTawheed?tab=repositories" class="text-accent hover:text-white transition duration-300"><i class="fa-brands fa-github text-3xl"></i></a>
-                        <a target="_blank" href="https://www.facebook.com/ahmed.tawheed.294446?mibextid=ZbWKwL" class="text-accent hover:text-white transition duration-300"><i class="fa-brands fa-facebook text-3xl"></i></a>
+    <section id="contact" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">تواصل معي</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-300" data-aos="fade-up" data-aos-delay="200">
+                    هل لديك مشروع في ذهنك؟ لا تتردد في التواصل معي
+                </p>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/3" data-aos="fade-right">
+                    <div class="glass p-8 rounded-xl h-full">
+                        <h3 class="text-xl font-bold mb-6">معلومات التواصل</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-cyan-500 flex items-center justify-center ml-4 flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">العنوان</h4>
+                                    <p class="text-gray-300">القاهرة، مصر</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-cyan-500 flex items-center justify-center ml-4 flex-shrink-0">
+                                    <i class="fas fa-envelope text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">البريد الإلكتروني</h4>
+                                    <p class="text-gray-300">ahmadtawheed@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-cyan-500 flex items-center justify-center ml-4 flex-shrink-0">
+                                    <i class="fas fa-phone-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">الهاتف</h4>
+                                    <p class="text-gray-300">+20 150-1021-670</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-bold mb-4">تابعني على</h4>
+                            <div class="flex space-x-4 space-x-reverse">
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Contact Form -->
-                <div class="md:w-2/3 max-w-lg card p-8 rounded-xl">
-                    <form id="contact-form" class="space-y-4">
-                        <div>
-                            <input type="text" id="name" placeholder="اسمك" required
-                                class="w-full p-3 rounded-lg bg-[#121212] border border-[#333] focus:outline-none focus:ring-2 focus:ring-accent transition duration-300">
-                        </div>
-                        <div>
-                            <input type="email" id="email" placeholder="بريدك الإلكتروني" required
-                                class="w-full p-3 rounded-lg bg-[#121212] border border-[#333] focus:outline-none focus:ring-2 focus:ring-accent transition duration-300">
-                        </div>
-                        <div>
-                            <textarea id="message" rows="4" placeholder="رسالتك" required
-                                class="w-full p-3 rounded-lg bg-[#121212] border border-[#333] focus:outline-none focus:ring-2 focus:ring-accent transition duration-300"></textarea>
-                        </div>
-                        <button type="submit"
-                            class="w-full p-3 rounded-lg text-white bg-accent hover:bg-[#333] transition duration-300 font-bold">
-                            إرسال الرسالة
-                        </button>
-                    </form>
-                    <div id="form-message" class="mt-4 text-center hidden"></div>
+                
+                <div class="lg:w-2/3" data-aos="fade-left">
+                    <div class="glass p-8 rounded-xl">
+                        <form id="contact-form">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block mb-2">الاسم</label>
+                                    <input type="text" class="form-input w-full" required>
+                                </div>
+                                <div>
+                                    <label class="block mb-2">البريد الإلكتروني</label>
+                                    <input type="email" class="form-input w-full" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block mb-2">الموضوع</label>
+                                <input type="text" class="form-input w-full" required>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block mb-2">الرسالة</label>
+                                <textarea rows="5" class="form-input w-full" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">
+                                إرسال الرسالة
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-[#1a1a1a] py-8 text-center text-gray-500">
-        <p>&copy; 2024 أحمد توحيد. جميع الحقوق محفوظة.</p>
-        <!-- Display the user ID for Firestore collaboration -->
-        <div id="user-id-display" class="mt-2 text-xs text-gray-600"></div>
+    <footer class="py-10 bg-gray-800 border-t border-gray-700">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-400">© 2024 أحمد توحيد. جميع الحقوق محفوظة.</p>
+                </div>
+                
+                <div class="flex space-x-6 space-x-reverse">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
 
-    <!-- Firebase SDK Scripts -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global variables provided by the environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // Initialize Firebase
-        let db, auth;
-        if (Object.keys(firebaseConfig).length > 0) {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-
-            // Function to handle Firebase authentication
-            async function authenticate() {
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                    console.log("Firebase authenticated successfully.");
-                    // After successful authentication, set up the listeners
-                    setupRealtimeListeners();
-                } catch (error) {
-                    console.error("Firebase Authentication Error:", error);
-                }
-            }
-
-            // Function to set up real-time listeners for all projects
-            function setupRealtimeListeners() {
-                const projectCards = document.querySelectorAll('.portfolio-item');
-                const userIdDisplay = document.getElementById('user-id-display');
-                if (auth.currentUser) {
-                    userIdDisplay.textContent = `User ID: ${auth.currentUser.uid}`;
-                }
-
-                projectCards.forEach(card => {
-                    const projectId = card.dataset.projectId;
-                    const viewCountElement = card.querySelector('.view-count-value');
-
-                    const projectRef = doc(db, `/artifacts/${appId}/public/data/projects`, projectId);
-
-                    onSnapshot(projectRef, (docSnap) => {
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            if (data && data.viewCount !== undefined) {
-                                viewCountElement.textContent = data.viewCount;
-                            }
-                        } else {
-                            console.log(`Document for project ${projectId} does not exist. Initializing with 0 views.`);
-                            setDoc(projectRef, { viewCount: 0 });
-                        }
-                    }, (error) => {
-                        console.error(`Error listening to project ${projectId}:`, error);
-                    });
-                });
-            }
-
-            // Function to increment the view count atomically using a transaction
-            async function incrementViewCount(projectId) {
-                if (!db || !auth.currentUser) {
-                    console.error("Firestore or user not ready.");
-                    return;
-                }
-
-                const projectRef = doc(db, `/artifacts/${appId}/public/data/projects`, projectId);
-
-                try {
-                    await runTransaction(db, async (transaction) => {
-                        const projectDoc = await transaction.get(projectRef);
-                        if (!projectDoc.exists()) {
-                            transaction.set(projectRef, { viewCount: 1 });
-                        } else {
-                            const newViewCount = projectDoc.data().viewCount + 1;
-                            transaction.update(projectRef, { viewCount: newViewCount });
-                        }
-                    });
-                    console.log(`View count for project ${projectId} incremented successfully.`);
-                } catch (error) {
-                    console.error("Transaction failed:", error);
-                }
-            }
-
-            // Add click event listeners to view buttons
-            document.querySelectorAll('.view-project-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const projectId = button.closest('.portfolio-item').dataset.projectId;
-                    incrementViewCount(projectId);
-                });
-            });
-
-            // Start the authentication process
-            authenticate();
-        } else {
-            console.error("Firebase config is missing. Firestore features will not work.");
-        }
-    </script>
-
-    <!-- JavaScript for other interactivity -->
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu toggle
-            const menuBtn = document.getElementById('menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+        
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
             });
-
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+        });
+        
+        // Initialize Tilt.js for 3D card effects
+        $(document).ready(function() {
+            $('.card-3d').tilt({
+                maxTilt: 10,
+                perspective: 1000,
+                easing: "cubic-bezier(.03,.98,.52,.99)",
+                speed: 500,
+                transition: true,
+                reset: true
+            });
+        });
+        
+        // Three.js background for hero section
+        function initThreeJS() {
+            const canvas = document.getElementById('hero-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry;
+            const particlesCnt = 2000;
+            const posArray = new Float32Array(particlesCnt * 3);
+            
+            for(let i = 0; i < particlesCnt * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 10;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            // Materials
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x4CAF50
+            });
+            
+            // Mesh
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            camera.position.z = 3;
+            
+            // Animation
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.x += 0.001;
+                particlesMesh.rotation.y += 0.001;
+                
+                renderer.render(scene, camera);
+            };
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        initThreeJS();
+        
+        // Animate skill bars when in viewport
+        const skillBars = document.querySelectorAll('.skill-progress');
+        
+        const animateSkillBars = () => {
+            skillBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                bar.style.width = width;
+            });
+        };
+        
+        // Intersection Observer for skill bars
+        const skillsSection = document.querySelector('#skills');
+        const skillsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                animateSkillBars();
+                skillsObserver.unobserve(skillsSection);
+            }
+        }, { threshold: 0.5 });
+        
+        skillsObserver.observe(skillsSection);
+        
+        // Counter animation for stats
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        
+        const countUp = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(countUp, 10);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        };
+        
+        // Intersection Observer for counters
+        const statsSection = document.querySelector('.stat-card').parentElement;
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                countUp();
+                statsObserver.unobserve(statsSection);
+            }
+        }, { threshold: 0.5 });
+        
+        statsObserver.observe(statsSection);
+        
+        // Contact form submission
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show success notification
+            Toastify({
+                text: "تم إرسال رسالتك بنجاح! سأتواصل معك قريباً.",
+                duration: 5000,
+                gravity: "top",
+                position: "left",
+                backgroundColor: "linear-gradient(to right, #4CAF50, #8BC34A)",
+                stopOnFocus: true
+            }).showToast();
+            
+            // Reset form
+            contactForm.reset();
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
                         behavior: 'smooth'
                     });
-                    if (!mobileMenu.classList.contains('hidden')) {
-                         mobileMenu.classList.add('hidden');
-                    }
-                });
-            });
-
-            // Intersection Observer for animated counters
-            const counters = document.querySelectorAll('.animated-counter');
-            const counterOptions = {
-                threshold: 0.5
-            };
-
-            const counterObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const target = +entry.target.getAttribute('data-target');
-                        const element = entry.target;
-                        let count = 0;
-                        const duration = 2000;
-                        const increment = target / (duration / 10);
-
-                        const updateCounter = () => {
-                            if (count < target) {
-                                count += increment;
-                                element.innerText = Math.ceil(count);
-                                setTimeout(updateCounter, 10);
-                            } else {
-                                element.innerText = target;
-                                observer.unobserve(element);
-                            }
-                        };
-                        updateCounter();
-                    }
-                });
-            }, counterOptions);
-
-            counters.forEach(counter => {
-                counterObserver.observe(counter);
-            });
-
-            // Intersection Observer for fade-in animations on scroll
-            const fadeElements = document.querySelectorAll('.scroll-fade-in');
-            const fadeObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        fadeObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            fadeElements.forEach(el => {
-                fadeObserver.observe(el);
-            });
-
-            // Intersection Observer for skill bars animation
-            const skillBars = document.querySelectorAll('.skill-bar');
-            const skillObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.8 }); // Trigger when 80% of the element is visible
-
-            skillBars.forEach(bar => {
-                skillObserver.observe(bar);
-            });
-
-            // Simple contact form submission (for demo purposes)
-            const contactForm = document.getElementById('contact-form');
-            const formMessage = document.getElementById('form-message');
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                formMessage.classList.remove('hidden');
-                formMessage.classList.add('text-green-400');
-                formMessage.innerText = 'تم استلام رسالتك بنجاح! سأتواصل معك قريباً.';
-                contactForm.reset();
-            });
-
-            // Testimonials Slider Logic
-            const testimonials = [{
-                name: "محمد علي",
-                image: "https://placehold.co/100x100/4CAF50/FFFFFF?text=MA",
-                comment: "أحمد عمل معايا شغل جامد جداً في الموقع بتاعنا. بجد فاق توقعاتي من حيث التصميم والأداء. الخدمة ممتازة والدعم بتاعه على طول موجود!",
-                rating: 5
-            }, {
-                name: "فاطمة الزهراء",
-                image: "https://placehold.co/100x100/1e88e5/FFFFFF?text=FZ",
-                comment: "تطوير موقع المتجر كان سهل وسريع مع أحمد. ساعدنا نعمل منصة تجارة إلكترونية قوية وسهلة الاستخدام لعملائنا.",
-                rating: 4
-            }, {
-                name: "علياء محمود",
-                image: "https://placehold.co/100x100/ff5722/FFFFFF?text=AM",
-                comment: "الشغل مع أحمد كان حلو جداً. تصميم الموقع الجديد لمدرسي الكيمياء كان احترافي أوي، وساعدنا نزود عدد الطلاب اللي سجلوا معانا.",
-                rating: 5
-            }, ];
-
-            let currentTestimonialIndex = 0;
-            const testimonialSlider = document.getElementById('testimonial-slider');
-            const prevButton = document.getElementById('prev-testimonial');
-            const nextButton = document.getElementById('next-testimonial');
-
-            function renderStars(rating) {
-                let stars = '';
-                for (let i = 0; i < 5; i++) {
-                    if (i < rating) {
-                        stars += `<i class="fa-solid fa-star text-yellow-400"></i>`;
-                    } else {
-                        stars += `<i class="fa-regular fa-star text-gray-500"></i>`;
-                    }
                 }
-                return stars;
-            }
-
-            function updateTestimonial() {
-                const testimonial = testimonials[currentTestimonialIndex];
-                testimonialSlider.innerHTML = `
-                    <div class="testimonial-card p-8 rounded-xl flex flex-col items-center text-center">
-                        <img src="${testimonial.image}" alt="صورة ${testimonial.name}" class="w-24 h-24 rounded-full mb-4 border-2 border-accent">
-                        <h4 class="text-xl font-bold text-white">${testimonial.name}</h4>
-                        <div class="flex items-center space-x-1 space-x-reverse text-xl my-2">
-                            ${renderStars(testimonial.rating)}
-                        </div>
-                        <p class="text-gray-400 italic mt-4">"${testimonial.comment}"</p>
-                    </div>
-                `;
-            }
-
-            prevButton.addEventListener('click', () => {
-                currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
-                updateTestimonial();
             });
-
-            nextButton.addEventListener('click', () => {
-                currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
-                updateTestimonial();
-            });
-
-            // Initial render
-            updateTestimonial();
         });
     </script>
 </body>
 </html>
-
