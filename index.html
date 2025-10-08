@@ -565,6 +565,7 @@
                             <p class="text-gray-400">البريد الإلكتروني:</p>
                             <p class="font-medium">ahmadtawheed74@gmail.com</p>
                         </div>
+                        <br />
                         <div>
                             <p class="text-gray-400">الهاتف:</p>
                             <p class="font-medium">+20 150-1021-670</p>
@@ -1016,22 +1017,22 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label class="block mb-2">الاسم</label>
-                                    <input type="text" class="form-input" required>
+                                    <input type="text" id="name" class="form-input" required>
                                 </div>
                                 <div>
                                     <label class="block mb-2">البريد الإلكتروني</label>
-                                    <input type="email" class="form-input" required>
+                                    <input type="email" id="email" class="form-input" required>
                                 </div>
                             </div>
                             
                             <div class="mb-6">
                                 <label class="block mb-2">الموضوع</label>
-                                <input type="text" class="form-input" required>
+                                <input type="text" id="subject" class="form-input" required>
                             </div>
                             
                             <div class="mb-6">
                                 <label class="block mb-2">الرسالة</label>
-                                <textarea rows="5" class="form-input" required></textarea>
+                                <textarea id="message" rows="5" class="form-input" required></textarea>
                             </div>
                             
                             <button type="submit" class="btn-primary">
@@ -1233,11 +1234,11 @@
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // الحصول على قيم النموذج
-            const name = contactForm.querySelector('input[type="text"]').value;
-            const email = contactForm.querySelector('input[type="email"]').value;
-            const subject = contactForm.querySelector('input[type="text"]:nth-of-type(2)').value;
-            const message = contactForm.querySelector('textarea').value;
+            // الحصول على قيم الحقول بشكل صحيح
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
             
             // إنشاء رسالة واتساب
             const whatsappMessage = `مرحباً أحمد،%0A%0A*اسمي:* ${name}%0A*بريدي الإلكتروني:* ${email}%0A*الموضوع:* ${subject}%0A%0A*الرسالة:*%0A${message}%0A%0Aأرجو الرد في أقرب فرصة ممكنة.`;
