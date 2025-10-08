@@ -258,6 +258,8 @@
             padding: 12px 15px;
             color: white;
             transition: all 0.3s ease;
+            width: 100%;
+            max-width: 100%;
         }
         
         .form-input:focus {
@@ -340,6 +342,34 @@
             .hero-title {
                 font-size: 2.5rem;
             }
+            
+            /* إضافة قيود لمنع التمدد الأفقي */
+            .container {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            
+            .portfolio-item {
+                width: 100%;
+            }
+            
+            .testimonial-card {
+                width: 100%;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+            
+            /* ضبط العناصر التي قد تسبب تمدد أفقي */
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            .form-input {
+                width: 100%;
+            }
         }
 
         .beMenu{
@@ -355,12 +385,65 @@
         .beMenu a:hover {
             color: #8BC34A;
         }
+        
+        /* زر الواتساب العائم */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            left: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            transform: scale(1.1);
+        }
+        
+        /* تعديلات إضافية لمنع التمدد الأفقي */
+        .overflow-x-hidden {
+            overflow-x: hidden;
+        }
+        
+        .max-w-full {
+            max-width: 100%;
+        }
+        
+        /* ضبط الجداول والأقسام العريضة */
+        table {
+            max-width: 100%;
+            overflow-x: auto;
+            display: block;
+            white-space: nowrap;
+        }
+        
+        /* ضبط الصور لتكون متجاوبة */
+        img, video {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* ضبط الإطارات والنماذج */
+        iframe, embed, object {
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <header class="fixed top-0 w-full z-50 glass py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
+    <header class="fixed top-0 w-full z-50 glass py-4 overflow-x-hidden">
+        <div class="container mx-auto px-4 flex justify-between items-center max-w-full">
             <a href="#" class="text-2xl font-bold gradient-text">أحمد توحيد</a>
             
             <nav class="hidden md:flex space-x-6 space-x-reverse">
@@ -382,7 +465,7 @@
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 bg-opacity-95 z-50 p-6 beMenu">
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 bg-opacity-95 z-50 p-6 beMenu overflow-x-hidden">
             <button id="close-menu" class="absolute top-4 left-4 text-white">
                 <i class="fas fa-times text-xl"></i>
             </button>
@@ -401,10 +484,10 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden overflow-x-hidden">
         <canvas id="hero-canvas"></canvas>
         
-        <div class="container mx-auto px-4 z-10 text-center">
+        <div class="container mx-auto px-4 z-10 text-center max-w-full">
             <h1 class="hero-title text-4xl md:text-6xl font-bold mb-4" data-aos="fade-up">
                 أحمد <span class="gradient-text">توحيد</span>
             </h1>
@@ -445,8 +528,8 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4">
+    <section id="about" class="py-20 bg-gray-900 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">من أنا</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
@@ -456,7 +539,7 @@
                 <div class="md:w-1/3" data-aos="fade-right">
                     <div class="relative">
                         <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-cyan-500 rounded-full transform rotate-6 opacity-70"></div>
-                        <img src="https://avatars.githubusercontent.com/u/186093996?s=400&u=693dcfe42ff8d02153d02f62c29ef060de301765&v=4" alt="أحمد توحيد" class="relative rounded-full w-64 h-64 mx-auto border-4 border-white">
+                        <img src="https://avatars.githubusercontent.com/u/186093996?s=400&u=693dcfe42ff8d02153d02f62c29ef060de301765&v=4" alt="أحمد توحيد" class="relative rounded-full w-64 h-64 mx-auto border-4 border-white max-w-full">
                     </div>
                 </div>
                 
@@ -495,8 +578,8 @@
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-20 bg-gray-800">
-        <div class="container mx-auto px-4">
+    <section id="services" class="py-20 bg-gray-800 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">خدماتي</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
@@ -552,8 +635,8 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4">
+    <section id="skills" class="py-20 bg-gray-900 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">مهاراتي التقنية</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
@@ -661,8 +744,8 @@
     </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio" class="py-20 bg-gray-800">
-        <div class="container mx-auto px-4">
+    <section id="portfolio" class="py-20 bg-gray-800 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">أعمالي</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
@@ -761,8 +844,8 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4">
+    <section id="testimonials" class="py-20 bg-gray-900 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">آراء العملاء</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
@@ -833,8 +916,8 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-20 bg-gray-800">
-        <div class="container mx-auto px-4">
+    <section class="py-20 bg-gray-800 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="stat-card text-center" data-aos="zoom-in" data-aos-delay="100">
                     <h3 class="text-4xl font-bold gradient-text mb-2 counter" data-target="50">0</h3>
@@ -860,8 +943,8 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4">
+    <section id="contact" class="py-20 bg-gray-900 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">تواصل معي</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
@@ -933,22 +1016,22 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label class="block mb-2">الاسم</label>
-                                    <input type="text" class="form-input w-full" required>
+                                    <input type="text" class="form-input" required>
                                 </div>
                                 <div>
                                     <label class="block mb-2">البريد الإلكتروني</label>
-                                    <input type="email" class="form-input w-full" required>
+                                    <input type="email" class="form-input" required>
                                 </div>
                             </div>
                             
                             <div class="mb-6">
                                 <label class="block mb-2">الموضوع</label>
-                                <input type="text" class="form-input w-full" required>
+                                <input type="text" class="form-input" required>
                             </div>
                             
                             <div class="mb-6">
                                 <label class="block mb-2">الرسالة</label>
-                                <textarea rows="5" class="form-input w-full" required></textarea>
+                                <textarea rows="5" class="form-input" required></textarea>
                             </div>
                             
                             <button type="submit" class="btn-primary">
@@ -962,8 +1045,8 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-10 bg-gray-800 border-t border-gray-700">
-        <div class="container mx-auto px-4">
+    <footer class="py-10 bg-gray-800 border-t border-gray-700 overflow-x-hidden">
+        <div class="container mx-auto px-4 max-w-full">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
                     <p class="text-gray-400">© 2025 أحمد توحيد. جميع الحقوق محفوظة.</p>
@@ -986,6 +1069,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- زر الواتساب العائم -->
+    <a href="https://wa.me/201501021670" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -1145,9 +1233,22 @@
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Show success notification
+            // الحصول على قيم النموذج
+            const name = contactForm.querySelector('input[type="text"]').value;
+            const email = contactForm.querySelector('input[type="email"]').value;
+            const subject = contactForm.querySelector('input[type="text"]:nth-of-type(2)').value;
+            const message = contactForm.querySelector('textarea').value;
+            
+            // إنشاء رسالة واتساب
+            const whatsappMessage = `مرحباً أحمد،%0A%0A*اسمي:* ${name}%0A*بريدي الإلكتروني:* ${email}%0A*الموضوع:* ${subject}%0A%0A*الرسالة:*%0A${message}%0A%0Aأرجو الرد في أقرب فرصة ممكنة.`;
+            
+            // فتح واتساب مع الرسالة
+            const whatsappUrl = `https://wa.me/201501021670?text=${whatsappMessage}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // إظهار إشعار نجاح
             Toastify({
-                text: "تم إرسال رسالتك بنجاح! سأتواصل معك قريباً.",
+                text: "جاري فتح واتساب لإرسال رسالتك...",
                 duration: 5000,
                 gravity: "top",
                 position: "left",
@@ -1155,7 +1256,7 @@
                 stopOnFocus: true
             }).showToast();
             
-            // Reset form
+            // إعادة تعيين النموذج
             contactForm.reset();
         });
         
